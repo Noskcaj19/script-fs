@@ -1,0 +1,15 @@
+[package]
+name = "script-fs"
+version = "0.1.0"
+authors = ["Noskcaj <kcajdev@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+env_logger = "0.5.13"
+fuse = "0.3.1"
+libc = "0.2.43"
+time = "0.1.40"
+signal = "0.6.0"
+nix = "0.11.0"
+toml = "0.4.8"
+walkdir = "2.2.6"

@@ -1,0 +1,5 @@
+# Root configuration file
+# Defines FS wide options
+
+# the FUSE filesystem name (defaults to scriptfs)
+name = "Custom name"

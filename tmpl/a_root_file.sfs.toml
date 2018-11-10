@@ -1,0 +1,9 @@
+# A normal file in the root
+
+# file: a normal file
+# script: executes a script
+[file.script]
+# path to executable file
+# if none is provided, defaults to this files name without `.sfs.toml`
+# For example a config file named `"foo_bar.sh.sfs.toml"` would execute `"foo_bar.sh"`
+src = "just_a_root_file.sh"
