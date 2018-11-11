@@ -3,3 +3,7 @@
 
 # the FUSE filesystem name (defaults to scriptfs)
 name = "Custom name"
+
+# the mount point, relative to the parent of the template directory
+# TODO: can be overriden from the executable
+mount = "mnt"

@@ -1,5 +1,6 @@
 mod args;
 mod core;
+mod file_config;
 
 fn main() {
     let template_root_path = args::parse_args();
