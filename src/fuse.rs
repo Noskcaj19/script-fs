@@ -10,7 +10,7 @@ use time::Timespec;
 const TTL: Timespec = Timespec { sec: 1, nsec: 0 }; // 1 second
 
 const CREATE_TIME: Timespec = Timespec {
-    sec: 1381237736,
+    sec: 1_381_237_736,
     nsec: 0,
 }; // 2013-10-08 08:56
 
@@ -31,7 +31,7 @@ const HELLO_DIR_ATTR: FileAttr = FileAttr {
     flags: 0,
 };
 
-const HELLO_TXT_CONTENT: &'static str = "Hello World!\n";
+const HELLO_TXT_CONTENT: &str = "Hello World!\n";
 
 const HELLO_TXT_ATTR: FileAttr = FileAttr {
     ino: 2,
@@ -56,7 +56,7 @@ struct ScriptFS {
 
 impl ScriptFS {
     fn new(core: Core) -> ScriptFS {
-        ScriptFS { core: core }
+        ScriptFS { core }
     }
 }
 

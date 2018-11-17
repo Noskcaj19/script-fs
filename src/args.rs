@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 pub fn parse_args() -> PathBuf {
-    if let Some(template_dir) = std::env::args().skip(1).next() {
+    if let Some(template_dir) = std::env::args().nth(1) {
         let dir = PathBuf::from(template_dir);
 
         if dir.is_dir() {
