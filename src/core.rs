@@ -37,16 +37,32 @@ impl Core {
 
         let mut entries: IndexMap<PathBuf, CoreFile> = IndexMap::new();
         for (path, entry) in files {
+            // TODO: Make this intelligible
             if let Some(parent) = path.as_path().parent() {
+                // Dir must be before files
+                entries
+                    .entry(parent.to_owned())
+                    .or_insert(CoreFile::Dir(vec![]));
                 entries.entry(path.clone()).or_insert(CoreFile::File(entry));
                 // TODO: Entry api that gets index?
                 // TODO: Remove second lookup
                 if let Some((index, _, _)) = entries.get_full(&path) {
-                    let dir = entries
-                        .entry(parent.to_owned())
-                        .or_insert(CoreFile::Dir(vec![]));
-                    if let CoreFile::Dir(ref mut files) = dir {
-                        files.push(index);
+                    let parent_index = {
+                        let (parent_index, _, dir) = entries.get_full_mut(parent).unwrap();
+                        if let CoreFile::Dir(ref mut files) = dir {
+                            files.push(index);
+                        }
+                        parent_index
+                    };
+
+                    match parent.parent() {
+                        Some(parent) => {
+                            let parent_dir = entries.get_mut(parent);
+                            if let Some(CoreFile::Dir(ref mut files)) = parent_dir {
+                                files.push(parent_index);
+                            }
+                        }
+                        None => {}
                     }
                 }
             } else {
