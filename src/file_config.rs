@@ -1,25 +1,25 @@
 /// Defines structure for the `.sfs.toml` files and the root config
 use serde_derive::Deserialize;
-use serde_derive::Serialize;
+use std::path::PathBuf;
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct RootConfig {
     pub name: String,
     pub mount: String,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct Script {
-    pub src: String,
+    pub src: Option<PathBuf>,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Debug)]
 #[serde(untagged)]
 pub enum File {
     Script { script: Script },
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Debug)]
 #[serde(untagged)]
 pub enum FileConfig {
     File { file: File },

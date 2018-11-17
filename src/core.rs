@@ -1,18 +1,24 @@
 use crate::file_config::{FileConfig, RootConfig};
+use indexmap::IndexMap;
 use std::{
-    collections::HashMap,
     fs::File,
     io::Read,
     path::{Path, PathBuf},
 };
 use walkdir::WalkDir;
 
+#[derive(Debug)]
+pub(crate) enum CoreFile {
+    File(FileConfig),
+    Dir(Vec<usize>),
+}
+
 /// Internal data store for the filesystem
 #[derive(Debug)]
 pub struct Core {
-    root_path: PathBuf,
-    root_config: RootConfig,
-    entries: HashMap<PathBuf, FileConfig>,
+    pub root_path: PathBuf,
+    pub root_config: RootConfig,
+    pub(crate) entries: IndexMap<PathBuf, CoreFile>,
 }
 
 impl Core {
@@ -20,7 +26,7 @@ impl Core {
     pub fn new_from_path(path: PathBuf) -> Core {
         // TODO: Error handling
         let root_config = load_root_config(path.as_path()).expect("No root config file");
-        let entries =
+        let files =
             find_config_paths(path.as_path()).filter_map(|p| match load_config(p.as_path()) {
                 Ok(c) => Some((p, c)),
                 Err(e) => {
@@ -28,10 +34,30 @@ impl Core {
                     None
                 }
             });
+
+        let mut entries: IndexMap<PathBuf, CoreFile> = IndexMap::new();
+        for (path, entry) in files {
+            if let Some(parent) = path.as_path().parent() {
+                entries.entry(path.clone()).or_insert(CoreFile::File(entry));
+                // TODO: Entry api that gets index?
+                // TODO: Remove second lookup
+                if let Some((index, _, _)) = entries.get_full(&path) {
+                    let dir = entries
+                        .entry(parent.to_owned())
+                        .or_insert(CoreFile::Dir(vec![]));
+                    if let CoreFile::Dir(ref mut files) = dir {
+                        files.push(index);
+                    }
+                }
+            } else {
+                // TODO: ?
+            }
+        }
+
         Core {
             root_path: path,
             root_config,
-            entries: entries.collect(),
+            entries,
         }
     }
 }

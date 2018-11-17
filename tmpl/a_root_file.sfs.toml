@@ -1,8 +1,6 @@
 # A normal file in the root
 
 # file: a normal file
-type = "file"
-
 # script: executes a script
 [file.script]
 # path to executable file
